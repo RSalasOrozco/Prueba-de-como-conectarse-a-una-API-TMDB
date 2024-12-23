@@ -87,3 +87,19 @@ body {
 #btnInicio:hover {
   background: #de2f0c;
 }
+
+#searchInput {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+#searchButton {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #1d1d1d;
+  color: #fff;
+  cursor: pointer;
+}

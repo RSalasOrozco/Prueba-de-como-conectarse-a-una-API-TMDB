@@ -76,3 +76,93 @@ const cargarPeliculas = async () => {
 
 // Llamamos a la función al inicio para cargar las películas de la página 1.
 cargarPeliculas();
+
+// API Key y URL base
+const API_KEY = "192e0b9821564f26f52949758ea3c473";
+const BASE_URL = "https://api.themoviedb.org/3";
+
+// Elementos de búsqueda
+const searchInput = document.getElementById("searchInput");
+const searchButton = document.getElementById("searchButton");
+const searchResults = document.getElementById("searchResults");
+
+// Evento para buscar películas
+searchButton.addEventListener("click", () => {
+  const query = searchInput.value.trim(); // Obtiene el texto del input
+  if (query) {
+    buscarPeliculas(query); // Llama a la función de búsqueda
+  }
+});
+
+// Función para buscar películas
+const buscarPeliculas = async (query) => {
+  try {
+    const respuesta = await fetch(
+      `${BASE_URL}/search/movie?query=${query}&api_key=${API_KEY}&language=es-MX`
+    );
+    if (respuesta.status === 200) {
+      const datos = await respuesta.json();
+      mostrarResultadosBusqueda(datos.results);
+    } else {
+      console.log("Error al buscar películas");
+    }
+  } catch (error) {
+    console.error("Error en la búsqueda:", error);
+  }
+};
+
+// Función para mostrar resultados de búsqueda
+const mostrarResultadosBusqueda = (resultados) => {
+  if (resultados.length === 0) {
+    searchResults.innerHTML = "<p>No se encontraron resultados.</p>";
+    return;
+  }
+
+  let resultadosHTML = "";
+  resultados.forEach((pelicula) => {
+    resultadosHTML += `
+            <div class="pelicula" onclick="consultarDetalles(${pelicula.id})">
+                <img class="poster" src="https://image.tmdb.org/t/p/w500/${pelicula.poster_path}" alt="${pelicula.title}">
+                <h3 class="titulo">${pelicula.title}</h3>
+                <p>Fecha de lanzamiento: ${pelicula.release_date}</p>
+            </div>
+        `;
+  });
+  searchResults.innerHTML = resultadosHTML;
+};
+
+// Función para consultar detalles de una película
+const consultarDetalles = async (id) => {
+  try {
+    const respuesta = await fetch(
+      `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=es-MX`
+    );
+    if (respuesta.status === 200) {
+      const detalles = await respuesta.json();
+      mostrarDetalles(detalles);
+    } else {
+      console.log("Error al obtener detalles de la película");
+    }
+  } catch (error) {
+    console.error("Error al consultar detalles:", error);
+  }
+};
+
+// Función para mostrar detalles de una película
+const mostrarDetalles = (detalles) => {
+  searchResults.innerHTML = `
+        <div class="detalle">
+            <img class="poster" src="https://image.tmdb.org/t/p/w500/${detalles.poster_path}" alt="${detalles.title}">
+            <h2>${detalles.title}</h2>
+            <p>${detalles.overview}</p>
+            <p>Fecha de lanzamiento: ${detalles.release_date}</p>
+            <p>Promedio de votos: ${detalles.vote_average}</p>
+            <button onclick="volverResultados()">Volver</button>
+        </div>
+    `;
+};
+
+// Función para volver a los resultados de búsqueda
+const volverResultados = () => {
+  searchResults.innerHTML = "";
+};
