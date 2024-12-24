@@ -1,13 +1,8 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: "Montserrat", sans-serif;
   background: #e0e0e0;
   color: #1d1d1d;
+  margin: 0;
 }
 
 .contenedor {
@@ -89,17 +84,29 @@ body {
 }
 
 #searchInput {
-  width: 100%;
+  width: 200px;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin: 10px;
+  background: #241744;
+  color: #fff;
 }
 #searchButton {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background: #1d1d1d;
+  background: #241744;
   color: #fff;
   cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-poster {
+    height: 300px;
+  }
 }
